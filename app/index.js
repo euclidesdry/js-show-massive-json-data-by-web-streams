@@ -24,7 +24,7 @@ function appendToHTML(element) {
 			const card = `
 			<article>
 				<div class="text">
-					<h3>[.${++counter}]${title}</h3>
+					<h3>[${++counter}]${title}</h3>
 					<p>${description.slice(0, 100)}</p>
 					<a href="${url_anime}">Here's Why</a>
 				</div>
