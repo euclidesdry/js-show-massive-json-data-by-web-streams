@@ -22,6 +22,7 @@ createServer(async (request, response) => {
 	}
 
 	let items = 0;
+	request.once('close', _ => console.log('connection was closed!', items))
 	Readable.toWeb(createReadStream('./animeflv.csv')
 	)
 		// step to step to each individual item witch will travel
@@ -43,7 +44,8 @@ createServer(async (request, response) => {
 		// pipeTo is the last step
 		.pipeTo(new WritableStream({
 			async write(chunk) {
-				await setTimeout(1000);
+				// await setTimeout(100);
+				await setTimeout(5);
 				items++;
 				response.write(chunk);
 			},
