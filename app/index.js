@@ -1,5 +1,4 @@
 const API_URL = 'http://localhost:3000';
-import { TransformStream } from 'node:stream/web';
 
 async function consumeAPI(signal) {
 	const response = await fetch(API_URL, {
@@ -17,6 +16,14 @@ async function consumeAPI(signal) {
 	// }));
 
 	return reader;
+}
+
+function appendToHTML(element) {
+	return new WritableStream({
+		write({ title, description, url_anime }) {
+			element.innerHTML += title + "<br>";
+		}
+	})
 }
 
 // this function will certify that in case of arrive two chunks, both came in a single transmission
@@ -39,5 +46,12 @@ function parseNDJSON() {
 	})
 }
 
+const [
+	start,
+	stop,
+	cards
+] = ['start', 'stop', 'cards'].map(item => document.getElementById(item))
+
 const abortController = new AbortController();
-await consumeAPI(abortController.signal);
+const readable = await consumeAPI(abortController.signal);
+readable.pipeTo(appendToHTML(cards))
